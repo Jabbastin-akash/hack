@@ -1,0 +1,42 @@
+torch>=2.0.0
+torchvision>=0.15.0
+pillow>=10.0.0
+numpy>=1.24.0
+
+# CLIP model
+git+https://github.com/openai/CLIP.git
+# Alternative: ftfy, regex (CLIP dependencies)
+ftfy>=6.1.0
+regex>=2023.0.0
+
+# Future LLM components (optional, for Phase 2+)
+transformers>=4.35.0
+accelerate>=0.24.0
+peft>=0.6.0  # For LoRA fine-tuning
+bitsandbytes>=0.41.0  # For quantization
+
+# Vector database & RAG (optional, for Phase 3)
+faiss-cpu>=1.7.4  # Use faiss-gpu if CUDA available
+langchain>=0.1.0
+sentence-transformers>=2.2.0
+
+# Data handling
+opencv-python>=4.8.0  # Image preprocessing
+scikit-learn>=1.3.0  # Metrics and evaluation
+pandas>=2.0.0  # Data management
+
+# API & Serving (optional, for deployment)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+
+# Visualization & Monitoring (optional)
+matplotlib>=3.8.0
+seaborn>=0.13.0
+tensorboard>=2.15.0
+
+# Testing & Quality
+pytest>=7.4.0
+pytest-cov>=4.1.0
+black>=23.11.0  # Code formatting
+flake8>=6.1.0  # Linting
