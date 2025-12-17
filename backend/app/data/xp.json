@@ -1,0 +1,14 @@
+{
+  "default": {
+    "user_id": "default",
+    "xp": 0,
+    "level": 1,
+    "updated_at": null
+  },
+  "test_user": {
+    "user_id": "test_user",
+    "xp": 10,
+    "level": 1,
+    "updated_at": "2025-12-17T10:54:06.057341"
+  }
+}

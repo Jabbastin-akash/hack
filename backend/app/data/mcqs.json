@@ -1,0 +1,144 @@
+{
+  "questions": [
+    {
+      "id": "Q1",
+      "subject": "heart",
+      "question": "Which chamber of the heart pumps oxygenated blood to the body?",
+      "options": [
+        {"label": "A", "text": "Right atrium"},
+        {"label": "B", "text": "Left ventricle"},
+        {"label": "C", "text": "Right ventricle"},
+        {"label": "D", "text": "Left atrium"}
+      ],
+      "correct_answer": "B",
+      "explanation": "The left ventricle is the most muscular chamber and pumps oxygenated blood through the aorta to the entire body.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "Q2",
+      "subject": "dna",
+      "question": "What are the four nucleotide bases found in DNA?",
+      "options": [
+        {"label": "A", "text": "Adenine, Thymine, Guanine, Cytosine"},
+        {"label": "B", "text": "Adenine, Uracil, Guanine, Cytosine"},
+        {"label": "C", "text": "Adenine, Thymine, Glucose, Cytosine"},
+        {"label": "D", "text": "Arginine, Thymine, Guanine, Cytosine"}
+      ],
+      "correct_answer": "A",
+      "explanation": "DNA contains four bases: Adenine (A), Thymine (T), Guanine (G), and Cytosine (C). Note that RNA has Uracil instead of Thymine.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "Q3",
+      "subject": "cell",
+      "question": "Which organelle is known as the powerhouse of the cell?",
+      "options": [
+        {"label": "A", "text": "Nucleus"},
+        {"label": "B", "text": "Ribosome"},
+        {"label": "C", "text": "Mitochondria"},
+        {"label": "D", "text": "Golgi apparatus"}
+      ],
+      "correct_answer": "C",
+      "explanation": "Mitochondria produce ATP through cellular respiration, providing energy for the cell's activities.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "Q4",
+      "subject": "atom",
+      "question": "What determines the atomic number of an element?",
+      "options": [
+        {"label": "A", "text": "Number of neutrons"},
+        {"label": "B", "text": "Number of protons"},
+        {"label": "C", "text": "Number of electrons"},
+        {"label": "D", "text": "Total mass"}
+      ],
+      "correct_answer": "B",
+      "explanation": "The atomic number is defined by the number of protons in the nucleus, which also determines the element's identity.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "Q5",
+      "subject": "lever",
+      "question": "In a first-class lever, where is the fulcrum located?",
+      "options": [
+        {"label": "A", "text": "Between the effort and the load"},
+        {"label": "B", "text": "At the end opposite to the effort"},
+        {"label": "C", "text": "At the same point as the load"},
+        {"label": "D", "text": "At the same point as the effort"}
+      ],
+      "correct_answer": "A",
+      "explanation": "In a first-class lever (like a seesaw), the fulcrum is positioned between the effort force and the load.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "Q6",
+      "subject": "pendulum",
+      "question": "What factor primarily affects the period of a simple pendulum?",
+      "options": [
+        {"label": "A", "text": "Mass of the bob"},
+        {"label": "B", "text": "Length of the string"},
+        {"label": "C", "text": "Amplitude of swing"},
+        {"label": "D", "text": "Color of the bob"}
+      ],
+      "correct_answer": "B",
+      "explanation": "The period of a simple pendulum depends primarily on its length and gravitational acceleration, not on the mass or amplitude (for small angles).",
+      "difficulty": "medium"
+    },
+    {
+      "id": "Q7",
+      "subject": "ac circuit",
+      "question": "In an AC circuit, what does the term 'frequency' refer to?",
+      "options": [
+        {"label": "A", "text": "The maximum voltage"},
+        {"label": "B", "text": "The number of complete cycles per second"},
+        {"label": "C", "text": "The resistance of the circuit"},
+        {"label": "D", "text": "The power consumed"}
+      ],
+      "correct_answer": "B",
+      "explanation": "Frequency (measured in Hertz) is the number of complete AC cycles that occur in one second.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "Q8",
+      "subject": "heart",
+      "question": "What is the normal resting heart rate for adults?",
+      "options": [
+        {"label": "A", "text": "40-50 beats per minute"},
+        {"label": "B", "text": "60-100 beats per minute"},
+        {"label": "C", "text": "120-140 beats per minute"},
+        {"label": "D", "text": "150-180 beats per minute"}
+      ],
+      "correct_answer": "B",
+      "explanation": "The normal resting heart rate for adults ranges from 60 to 100 beats per minute, though athletes may have lower rates.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "Q9",
+      "subject": "dna",
+      "question": "What is the shape of a DNA molecule?",
+      "options": [
+        {"label": "A", "text": "Single helix"},
+        {"label": "B", "text": "Double helix"},
+        {"label": "C", "text": "Triple helix"},
+        {"label": "D", "text": "Linear strand"}
+      ],
+      "correct_answer": "B",
+      "explanation": "DNA has a double helix structure, discovered by Watson and Crick, with two complementary strands twisted around each other.",
+      "difficulty": "easy"
+    },
+    {
+      "id": "Q10",
+      "subject": "atom",
+      "question": "Which subatomic particle has a negative charge?",
+      "options": [
+        {"label": "A", "text": "Proton"},
+        {"label": "B", "text": "Neutron"},
+        {"label": "C", "text": "Electron"},
+        {"label": "D", "text": "Nucleus"}
+      ],
+      "correct_answer": "C",
+      "explanation": "Electrons are negatively charged particles that orbit the nucleus, while protons are positive and neutrons are neutral.",
+      "difficulty": "easy"
+    }
+  ]
+}

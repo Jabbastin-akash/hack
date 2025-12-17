@@ -1,0 +1,22 @@
+[
+  {
+    "user_id": "test_user",
+    "type": "completed_mcq",
+    "details": {
+      "question_id": "Q1",
+      "subject": "heart",
+      "correct": true,
+      "xp_awarded": 10
+    },
+    "timestamp": "2025-12-17T10:54:06.059328"
+  },
+  {
+    "user_id": "test_user",
+    "type": "viewed_model",
+    "details": {
+      "model": "heart.glb",
+      "duration": 30
+    },
+    "timestamp": "2025-12-17T10:54:10.129219"
+  }
+]
