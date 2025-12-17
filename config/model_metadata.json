@@ -1,0 +1,546 @@
+{
+    "metadata_version": "1.0",
+    "description": "Mapping between educational subjects and 3D GLB models with metadata",
+    "subjects": {
+        "heart": {
+            "file": "heart.glb",
+            "display_name": "Anatomical Heart",
+            "subject_category": "biology",
+            "subcategory": "anatomy",
+            "animations": [
+                "beat",
+                "explode",
+                "valve_open",
+                "valve_close"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "section_cut"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "Detailed 3D model of the human heart showing chambers, valves, and major vessels",
+            "educational_tags": [
+                "cardiovascular",
+                "circulatory_system",
+                "organ",
+                "anatomy"
+            ],
+            "recommended_age": "12+"
+        },
+        "cell": {
+            "file": "human_cell.glb",
+            "display_name": "Human Cell",
+            "subject_category": "biology",
+            "subcategory": "cell_biology",
+            "animations": [
+                "organelle_highlight",
+                "cell_division",
+                "membrane_transport"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "label_toggle",
+                "organelle_isolation"
+            ],
+            "difficulty_level": "beginner",
+            "description": "Generic human cell showing nucleus, mitochondria, and other organelles",
+            "educational_tags": [
+                "cell_biology",
+                "organelles",
+                "eukaryote"
+            ],
+            "recommended_age": "10+"
+        },
+        "dna": {
+            "file": "dna_helix.glb",
+            "display_name": "Double Helix DNA",
+            "subject_category": "biology",
+            "subcategory": "genetics",
+            "animations": [
+                "rotation",
+                "unzip",
+                "replication",
+                "base_pair_highlight"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "base_pair_inspect"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "DNA double helix structure showing base pairs and sugar-phosphate backbone",
+            "educational_tags": [
+                "genetics",
+                "molecular_biology",
+                "heredity",
+                "nucleic_acid"
+            ],
+            "recommended_age": "13+"
+        },
+        "water_molecule": {
+            "file": "h2o_molecule.glb",
+            "display_name": "Water Molecule (H₂O)",
+            "subject_category": "chemistry",
+            "subcategory": "molecular_structure",
+            "animations": [
+                "rotation",
+                "vibration",
+                "bond_stretch",
+                "electron_cloud"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "bond_angle_measure"
+            ],
+            "difficulty_level": "beginner",
+            "description": "Water molecule showing hydrogen and oxygen atoms with covalent bonds",
+            "educational_tags": [
+                "chemistry",
+                "molecules",
+                "covalent_bond",
+                "polarity"
+            ],
+            "recommended_age": "10+"
+        },
+        "atom": {
+            "file": "atom_model.glb",
+            "display_name": "Atomic Model",
+            "subject_category": "chemistry",
+            "subcategory": "atomic_structure",
+            "animations": [
+                "electron_orbit",
+                "nucleus_zoom",
+                "energy_level_transition"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "electron_shell_toggle"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "Bohr model of atom showing nucleus and electron shells",
+            "educational_tags": [
+                "atomic_structure",
+                "electrons",
+                "protons",
+                "neutrons"
+            ],
+            "recommended_age": "12+"
+        },
+        "lever": {
+            "file": "lever_physics.glb",
+            "display_name": "Lever Mechanism",
+            "subject_category": "physics",
+            "subcategory": "simple_machines",
+            "animations": [
+                "lift",
+                "balance",
+                "force_vector_display"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "force_adjustment",
+                "fulcrum_position"
+            ],
+            "difficulty_level": "beginner",
+            "description": "Simple lever demonstrating mechanical advantage and fulcrum principles",
+            "educational_tags": [
+                "mechanics",
+                "simple_machines",
+                "force",
+                "torque"
+            ],
+            "recommended_age": "10+"
+        },
+        "circuit": {
+            "file": "ac_circuit.glb",
+            "display_name": "AC Electrical Circuit",
+            "subject_category": "physics",
+            "subcategory": "electricity",
+            "animations": [
+                "current_flow",
+                "component_highlight",
+                "voltage_wave"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "component_inspect",
+                "circuit_trace"
+            ],
+            "difficulty_level": "advanced",
+            "description": "Alternating current circuit showing components and current flow",
+            "educational_tags": [
+                "electricity",
+                "circuits",
+                "ac_current",
+                "electronics"
+            ],
+            "recommended_age": "14+"
+        },
+        "mitochondria": {
+            "file": "mitochondria.glb",
+            "display_name": "Mitochondria Organelle",
+            "subject_category": "biology",
+            "subcategory": "cell_biology",
+            "animations": [
+                "atp_synthesis",
+                "cristae_highlight",
+                "section_view"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "membrane_cutaway"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "The powerhouse of the cell showing inner and outer membranes",
+            "educational_tags": [
+                "cell_biology",
+                "organelles",
+                "cellular_respiration",
+                "atp"
+            ],
+            "recommended_age": "12+"
+        },
+        "plant_cell": {
+            "file": "plant_cell.glb",
+            "display_name": "Plant Cell Structure",
+            "subject_category": "biology",
+            "subcategory": "cell_biology",
+            "animations": [
+                "organelle_highlight",
+                "chloroplast_zoom",
+                "cell_wall_highlight"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "organelle_isolation",
+                "comparison_mode"
+            ],
+            "difficulty_level": "beginner",
+            "description": "Plant cell showing cell wall, chloroplasts, and large vacuole",
+            "educational_tags": [
+                "botany",
+                "cell_biology",
+                "photosynthesis",
+                "plant_anatomy"
+            ],
+            "recommended_age": "10+"
+        },
+        "neuron": {
+            "file": "neuron_cell.glb",
+            "display_name": "Neuron Cell",
+            "subject_category": "biology",
+            "subcategory": "neuroscience",
+            "animations": [
+                "action_potential",
+                "synapse_signal",
+                "dendrite_highlight"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "signal_trace",
+                "myelin_toggle"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "Neuron cell showing dendrites, axon, and synaptic terminals",
+            "educational_tags": [
+                "neuroscience",
+                "nervous_system",
+                "signal_transmission"
+            ],
+            "recommended_age": "13+"
+        },
+        "circulation": {
+            "file": "blood_circulation.glb",
+            "display_name": "Blood Circulation System",
+            "subject_category": "biology",
+            "subcategory": "anatomy",
+            "animations": [
+                "blood_flow",
+                "heart_beat",
+                "vessel_highlight"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "system_trace",
+                "artery_vein_toggle"
+            ],
+            "difficulty_level": "advanced",
+            "description": "Complete circulatory system showing heart, arteries, and veins",
+            "educational_tags": [
+                "anatomy",
+                "cardiovascular",
+                "physiology",
+                "circulatory_system"
+            ],
+            "recommended_age": "13+"
+        },
+        "skeleton": {
+            "file": "skeletal_system.glb",
+            "display_name": "Human Skeletal System",
+            "subject_category": "biology",
+            "subcategory": "anatomy",
+            "animations": [
+                "bone_highlight",
+                "joint_movement",
+                "x-ray_view"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "bone_isolation",
+                "label_toggle"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "Complete human skeleton showing major bones and joints",
+            "educational_tags": [
+                "anatomy",
+                "skeletal_system",
+                "bones",
+                "joints"
+            ],
+            "recommended_age": "11+"
+        },
+        "digestion": {
+            "file": "digestive_system.glb",
+            "display_name": "Digestive System",
+            "subject_category": "biology",
+            "subcategory": "anatomy",
+            "animations": [
+                "food_path",
+                "organ_highlight",
+                "peristalsis"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "organ_isolation",
+                "process_trace"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "Human digestive system from mouth to intestines",
+            "educational_tags": [
+                "anatomy",
+                "digestion",
+                "physiology",
+                "nutrition"
+            ],
+            "recommended_age": "11+"
+        },
+        "solar_system": {
+            "file": "solar_system.glb",
+            "display_name": "Solar System",
+            "subject_category": "astronomy",
+            "subcategory": "planetary_science",
+            "animations": [
+                "planet_orbit",
+                "rotation",
+                "scale_compare"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "planet_select",
+                "orbit_trace"
+            ],
+            "difficulty_level": "beginner",
+            "description": "Solar system showing sun and eight planets in orbital configuration",
+            "educational_tags": [
+                "astronomy",
+                "planets",
+                "space",
+                "orbital_mechanics"
+            ],
+            "recommended_age": "8+"
+        },
+        "photosynthesis": {
+            "file": "photosynthesis.glb",
+            "display_name": "Photosynthesis Process",
+            "subject_category": "biology",
+            "subcategory": "botany",
+            "animations": [
+                "light_absorption",
+                "glucose_production",
+                "gas_exchange"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "process_step",
+                "molecule_trace"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "Photosynthesis process in plant cells showing light and dark reactions",
+            "educational_tags": [
+                "botany",
+                "photosynthesis",
+                "chloroplast",
+                "biochemistry"
+            ],
+            "recommended_age": "12+"
+        },
+        "periodic_table": {
+            "file": "periodic_table.glb",
+            "display_name": "Periodic Table of Elements",
+            "subject_category": "chemistry",
+            "subcategory": "elements",
+            "animations": [
+                "group_highlight",
+                "period_highlight",
+                "electron_config"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "element_select",
+                "property_filter"
+            ],
+            "difficulty_level": "intermediate",
+            "description": "3D interactive periodic table with element information",
+            "educational_tags": [
+                "chemistry",
+                "elements",
+                "periodic_table",
+                "atomic_number"
+            ],
+            "recommended_age": "12+"
+        },
+        "reaction": {
+            "file": "chemical_reaction.glb",
+            "display_name": "Chemical Reaction",
+            "subject_category": "chemistry",
+            "subcategory": "reactions",
+            "animations": [
+                "bond_break",
+                "bond_form",
+                "energy_transfer",
+                "collision"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "speed_control",
+                "replay"
+            ],
+            "difficulty_level": "advanced",
+            "description": "Chemical reaction showing reactants transforming to products",
+            "educational_tags": [
+                "chemistry",
+                "reactions",
+                "chemical_bonds",
+                "thermodynamics"
+            ],
+            "recommended_age": "13+"
+        },
+        "em_wave": {
+            "file": "electromagnetic_wave.glb",
+            "display_name": "Electromagnetic Wave",
+            "subject_category": "physics",
+            "subcategory": "waves",
+            "animations": [
+                "wave_propagation",
+                "field_oscillation",
+                "spectrum_display"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "frequency_adjust",
+                "wavelength_measure"
+            ],
+            "difficulty_level": "advanced",
+            "description": "Electromagnetic wave showing electric and magnetic field oscillations",
+            "educational_tags": [
+                "physics",
+                "waves",
+                "electromagnetism",
+                "light"
+            ],
+            "recommended_age": "14+"
+        },
+        "pulley": {
+            "file": "pulley_system.glb",
+            "display_name": "Pulley System",
+            "subject_category": "physics",
+            "subcategory": "simple_machines",
+            "animations": [
+                "lift",
+                "mechanical_advantage",
+                "force_diagram"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "load_adjustment",
+                "pulley_count"
+            ],
+            "difficulty_level": "beginner",
+            "description": "Pulley system demonstrating mechanical advantage",
+            "educational_tags": [
+                "mechanics",
+                "simple_machines",
+                "force",
+                "work"
+            ],
+            "recommended_age": "10+"
+        },
+        "motor": {
+            "file": "electric_motor.glb",
+            "display_name": "Electric Motor",
+            "subject_category": "physics",
+            "subcategory": "electromagnetism",
+            "animations": [
+                "rotation",
+                "magnetic_field",
+                "commutator_action",
+                "current_flow"
+            ],
+            "interactive_features": [
+                "rotate",
+                "zoom",
+                "speed_control",
+                "field_lines"
+            ],
+            "difficulty_level": "advanced",
+            "description": "Electric motor showing electromagnetic principles and rotation",
+            "educational_tags": [
+                "physics",
+                "electromagnetism",
+                "motors",
+                "energy_conversion"
+            ],
+            "recommended_age": "14+"
+        }
+    },
+    "category_info": {
+        "biology": {
+            "color": "#4CAF50",
+            "icon": "biology_icon",
+            "description": "Living organisms and life processes"
+        },
+        "chemistry": {
+            "color": "#2196F3",
+            "icon": "chemistry_icon",
+            "description": "Matter, composition, and chemical reactions"
+        },
+        "physics": {
+            "color": "#FF9800",
+            "icon": "physics_icon",
+            "description": "Energy, forces, and physical phenomena"
+        },
+        "astronomy": {
+            "color": "#9C27B0",
+            "icon": "astronomy_icon",
+            "description": "Celestial objects and space phenomena"
+        }
+    }
+}
