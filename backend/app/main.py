@@ -12,11 +12,10 @@ from app.utils.clip_inference import initialize_classifier
 async def lifespan(app: FastAPI):
     """
     Lifespan context manager for startup and shutdown events.
-    Initializes CLIP model at startup.
     """
-    # Startup: Load CLIP model
-    print("Starting up: Initializing CLIP classifier...")
-    initialize_classifier()
+    # Startup
+    print("Starting up...")
+    # Note: CLIP classifier is now lazy-loaded on first request to prevent startup timeouts
     print("Startup complete!")
     
     yield

@@ -3,6 +3,10 @@ from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
 from typing import Tuple
 import numpy as np
+import warnings
+
+# Suppress FutureWarning from huggingface_hub regarding resume_download
+warnings.filterwarnings("ignore", category=FutureWarning, module="huggingface_hub")
 
 
 class CLIPClassifier:
@@ -113,13 +117,13 @@ def initialize_classifier():
 def get_classifier() -> CLIPClassifier:
     """
     Get the global CLIP classifier instance.
+    Initializes it lazily if not already initialized.
     
     Returns:
         CLIPClassifier instance
-        
-    Raises:
-        RuntimeError: If classifier hasn't been initialized
     """
+    global _classifier
     if _classifier is None:
-        raise RuntimeError("CLIP classifier not initialized. Call initialize_classifier() first.")
+        print("Lazy loading CLIP classifier...")
+        initialize_classifier()
     return _classifier
