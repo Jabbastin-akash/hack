@@ -12,7 +12,7 @@ const API_CONFIG = {
     // Your backend base URL
     // Empty string means use the same origin as the frontend
     BASE_URL: '',
-    
+
     // API Endpoints
     ENDPOINTS: {
         HEALTH: '/health',

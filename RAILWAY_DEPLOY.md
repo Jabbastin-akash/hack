@@ -39,5 +39,6 @@ This guide explains how to deploy the EduLens application (Backend + Frontend) t
 ## Troubleshooting
 
 *   **Build Fails (Image too large)**: If you see an error like "Image of size 5.5 GB exceeded limit", it's because the default PyTorch installation includes GPU support (CUDA), which is huge. We have updated `backend/requirements.txt` to use the CPU-only version (`+cpu`), which is much smaller and fits within Railway's free tier limits.
+*   **Runtime Error (NumPy)**: If you see errors about "NumPy 2", we have pinned `numpy<2.0.0` in `requirements.txt` because the older PyTorch version isn't compatible with the latest NumPy yet.
 *   **Build Fails (Dependencies)**: Check the "Build Logs" in Railway. If it fails installing dependencies, ensure `backend/requirements.txt` is correct.
 *   **Frontend Connection Error**: Ensure `frontend/js/config.js` has `BASE_URL: ''` (empty string) so it uses the same domain as the backend.
