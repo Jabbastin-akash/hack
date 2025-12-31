@@ -63,7 +63,7 @@ app.include_router(mcq.router, tags=["MCQ"])
 app.include_router(activity.router, tags=["Activity"])
 
 
-@app.get("/")
+@app.get("/api")
 async def root():
     """Root endpoint with API information."""
     return {
@@ -82,6 +82,17 @@ async def root():
         "health": "/health",
         "dashboard": "/user/dashboard"
     }
+
+
+# Serve frontend
+# Check if running in Docker (or if /app/frontend exists)
+frontend_path = "/app/frontend"
+if not os.path.exists(frontend_path):
+    # Fallback for local development: Go up two levels from app/ (backend/app -> backend -> root)
+    frontend_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend")
+
+if os.path.exists(frontend_path):
+    app.mount("/", StaticFiles(directory=frontend_path, html=True), name="frontend")
 
 
 if __name__ == "__main__":
