@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduLens Config Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .config-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .config-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 EduLens Configuration Test</h1>
+        <p>Testing the configuration file and its functionality...</p>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Load the configuration -->
+    <script src="js/config.example.js"></script>
+    
+    <!-- Test the configuration -->
+    <script>
+        const resultsDiv = document.getElementById('results');
+        
+        function addResult(title, content, type = 'info') {
+            const div = document.createElement('div');
+            div.className = 'config-section';
+            div.innerHTML = `
+                <h3>${title}</h3>
+                <div class="test-result ${type}">
+                    <pre>${typeof content === 'object' ? JSON.stringify(content, null, 2) : content}</pre>
+                </div>
+            `;
+            resultsDiv.appendChild(div);
+        }
+        
+        // Test configuration loading
+        try {
+            addResult('✅ Configuration Loading', 'Configuration loaded successfully!', 'success');
+            
+            // Test API Configuration
+            addResult('🔗 API Configuration', {
+                baseUrl: API_CONFIG.BASE_URL,
+                demoMode: API_CONFIG.DEMO_MODE,
+                timeout: API_CONFIG.TIMEOUT,
+                endpointCount: Object.keys(API_CONFIG.ENDPOINTS).length
+            });
+            
+            // Test App Configuration
+            addResult('⚙️ App Configuration', {
+                name: APP_CONFIG.NAME,
+                version: APP_CONFIG.VERSION,
+                xpRewards: APP_CONFIG.XP_REWARDS,
+                levels: APP_CONFIG.LEVELS
+            });
+            
+            // Test Subject Configuration
+            addResult('📚 Subject Configuration', SUBJECT_CONFIG);
+            
+            // Test Helper Functions
+            const testEndpoint = API_CONFIG.ENDPOINTS.UPLOAD_IMAGE;
+            const fullUrl = ConfigHelper.getApiUrl(testEndpoint);
+            addResult('🛠️ Helper Functions Test', {
+                endpoint: testEndpoint,
+                fullUrl: fullUrl,
+                level10XP: ConfigHelper.calculateXPForLevel(10),
+                levelFromXP500: ConfigHelper.calculateLevelFromXP(500)
+            });
+            
+            // Test file validation
+            const mockFile = {
+                size: 1024 * 1024, // 1MB
+                type: 'image/jpeg'
+            };
+            const validation = ConfigHelper.validateUpload(mockFile);
+            addResult('📁 File Upload Validation Test', validation);
+            
+            // Test subject lookup
+            const biologySubject = ConfigHelper.getSubject('biology');
+            addResult('🧬 Subject Lookup Test', biologySubject);
+            
+            addResult('🎯 All Tests Completed', 'Configuration is working properly!', 'success');
+            
+        } catch (error) {
+            addResult('❌ Error', `Failed to load configuration: ${error.message}`, 'error');
+        }
+    </script>
+</body>
+</html>

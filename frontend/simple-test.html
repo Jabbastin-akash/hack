@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduLens Config Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .test-result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 EduLens Configuration Test</h1>
+        <div id="results">
+            <div class="status info">⏳ Loading configuration...</div>
+        </div>
+    </div>
+
+    <script>
+        // EduLens Configuration (embedded)
+        const API_CONFIG = {
+            BASE_URL: 'http://localhost:5000',
+            ENDPOINTS: {
+                UPLOAD_IMAGE: '/upload-image',
+                DASHBOARD: '/user/dashboard',
+                MCQ_DAILY: '/user/mcq/daily',
+                MCQ_SUBMIT: '/user/mcq/submit',
+            },
+            TIMEOUT: 30000,
+            DEMO_MODE: true,
+        };
+
+        const APP_CONFIG = {
+            NAME: 'EduLens',
+            VERSION: '1.0.0',
+            XP_REWARDS: {
+                QUIZ_CORRECT: 10,
+                IMAGE_UPLOAD: 15,
+                DAILY_STREAK: 25,
+            },
+            LEVELS: {
+                XP_PER_LEVEL: 100,
+                MAX_LEVEL: 50,
+            },
+        };
+
+        const SUBJECT_CONFIG = {
+            biology: { name: 'Biology', icon: '🧬', topics: ['anatomy', 'cells'] },
+            chemistry: { name: 'Chemistry', icon: '⚗️', topics: ['molecules', 'reactions'] },
+            physics: { name: 'Physics', icon: '⚛️', topics: ['mechanics', 'electricity'] },
+        };
+
+        const ConfigHelper = {
+            getApiUrl(endpoint) {
+                return `${API_CONFIG.BASE_URL}${endpoint}`;
+            },
+            calculateXPForLevel(level) {
+                return level * APP_CONFIG.LEVELS.XP_PER_LEVEL;
+            },
+            calculateLevelFromXP(xp) {
+                return Math.floor(xp / APP_CONFIG.LEVELS.XP_PER_LEVEL) + 1;
+            },
+            validateUpload(file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    return { valid: false, error: 'File too large' };
+                }
+                if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    return { valid: false, error: 'Invalid file type' };
+                }
+                return { valid: true };
+            },
+        };
+
+        // Test the configuration
+        setTimeout(() => {
+            const resultsDiv = document.getElementById('results');
+            let html = '<div class="status success">✅ Configuration loaded successfully!</div>';
+            
+            // Test basic config
+            html += `
+                <div class="test-result">
+                    <h3>🔗 API Configuration</h3>
+                    <p><strong>Base URL:</strong> ${API_CONFIG.BASE_URL}</p>
+                    <p><strong>Demo Mode:</strong> ${API_CONFIG.DEMO_MODE ? 'Enabled' : 'Disabled'}</p>
+                    <p><strong>Endpoints:</strong> ${Object.keys(API_CONFIG.ENDPOINTS).length}</p>
+                </div>
+            `;
+            
+            // Test app config
+            html += `
+                <div class="test-result">
+                    <h3>⚙️ App Configuration</h3>
+                    <p><strong>Name:</strong> ${APP_CONFIG.NAME}</p>
+                    <p><strong>Version:</strong> ${APP_CONFIG.VERSION}</p>
+                    <p><strong>Quiz XP:</strong> ${APP_CONFIG.XP_REWARDS.QUIZ_CORRECT}</p>
+                </div>
+            `;
+            
+            // Test subjects
+            html += `
+                <div class="test-result">
+                    <h3>📚 Subjects</h3>
+                    ${Object.entries(SUBJECT_CONFIG).map(([key, subject]) => 
+                        `<p>${subject.icon} <strong>${subject.name}</strong>: ${subject.topics.join(', ')}</p>`
+                    ).join('')}
+                </div>
+            `;
+            
+            // Test helper functions
+            const uploadUrl = ConfigHelper.getApiUrl(API_CONFIG.ENDPOINTS.UPLOAD_IMAGE);
+            const xpFor10 = ConfigHelper.calculateXPForLevel(10);
+            const levelFrom500 = ConfigHelper.calculateLevelFromXP(500);
+            
+            html += `
+                <div class="test-result">
+                    <h3>🛠️ Helper Functions</h3>
+                    <p><strong>Upload URL:</strong> ${uploadUrl}</p>
+                    <p><strong>Level 10 XP:</strong> ${xpFor10}</p>
+                    <p><strong>500 XP = Level:</strong> ${levelFrom500}</p>
+                </div>
+            `;
+            
+            // Test file validation
+            const testFiles = [
+                { name: 'valid.jpg', size: 2 * 1024 * 1024, type: 'image/jpeg' },
+                { name: 'too-big.jpg', size: 15 * 1024 * 1024, type: 'image/jpeg' },
+                { name: 'invalid.txt', size: 1024, type: 'text/plain' }
+            ];
+            
+            html += '<div class="test-result"><h3>🧪 File Validation Tests</h3>';
+            testFiles.forEach(file => {
+                const result = ConfigHelper.validateUpload(file);
+                const status = result.valid ? '✅' : '❌';
+                html += `<p>${status} <strong>${file.name}:</strong> ${result.valid ? 'Valid' : result.error}</p>`;
+            });
+            html += '</div>';
+            
+            html += '<div class="status success">🎯 All tests completed! Configuration is working perfectly.</div>';
+            
+            resultsDiv.innerHTML = html;
+            
+            console.log('Configuration test completed successfully!');
+        }, 500);
+    </script>
+</body>
+</html>

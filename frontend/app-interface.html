@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 EduLens - Educational Learning Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 2em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .stat {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 8px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #555;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            font-size: 2.5em;
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #764ba2;
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .subject-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .subject-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .streak-counter {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .streak-number {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div style="font-size: 2em;">🎓</div>
+                <h1>EduLens</h1>
+            </div>
+            <div class="user-info">
+                <div class="user-stats">
+                    <div class="stat">⚡ Level 12</div>
+                    <div class="stat">🔥 7 Day Streak</div>
+                    <div class="stat">⭐ 1,250 XP</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <nav>
+                    <ul class="nav-menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active" data-tab="dashboard">
+                                <span>📊</span> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-tab="upload">
+                                <span>📸</span> Image Upload
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-tab="quiz">
+                                <span>❓</span> Daily Quiz
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-tab="subjects">
+                                <span>📚</span> Subjects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-tab="progress">
+                                <span>📈</span> Progress
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-tab="badges">
+                                <span>🏆</span> Badges
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="content-area">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content">
+                    <h2>📊 Welcome back! Ready to learn?</h2>
+                    
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">🔥</div>
+                                <div>
+                                    <div class="card-title">Daily Streak</div>
+                                    <p>Keep your learning momentum!</p>
+                                </div>
+                            </div>
+                            <div class="streak-counter">
+                                <div class="streak-number">7</div>
+                                <div>Days in a row!</div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">⭐</div>
+                                <div>
+                                    <div class="card-title">Today's Progress</div>
+                                    <p>You're doing great!</p>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <p>65% of daily goals completed</p>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">🎯</div>
+                                <div>
+                                    <div class="card-title">Quick Actions</div>
+                                    <p>Jump right in!</p>
+                                </div>
+                            </div>
+                            <button class="btn" onclick="window.location.href='quiz.html?topic=daily'">Take Daily Quiz</button>
+                            <button class="btn" onclick="showTab('upload')" style="margin-left: 10px;">Upload Image</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Tab -->
+                <div id="upload" class="tab-content hidden">
+                    <h2>📸 Upload & Classify Images</h2>
+                    <div class="card">
+                        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                            <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(this)">
+                            <div style="font-size: 3em; margin-bottom: 15px;">📷</div>
+                            <h3>Drop an image here or click to browse</h3>
+                            <p>Supported: JPG, PNG, WebP (Max 10MB)</p>
+                        </div>
+                        <div id="uploadResult" class="hidden" style="margin-top: 20px;">
+                            <h3>Classification Result:</h3>
+                            <div id="resultContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Tab -->
+                <div id="quiz" class="tab-content hidden">
+                    <h2>❓ Daily Quiz Challenge</h2>
+                    <div class="quiz-container">
+                        <div class="question">
+                            What is the powerhouse of the cell?
+                        </div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">Nucleus</div>
+                            <div class="option" onclick="selectOption(this, true)">Mitochondria</div>
+                            <div class="option" onclick="selectOption(this, false)">Ribosome</div>
+                            <div class="option" onclick="selectOption(this, false)">Chloroplast</div>
+                        </div>
+                        <div style="margin-top: 20px; text-align: center;">
+                            <div>⏱️ Time remaining: <span id="timer">4:35</span></div>
+                            <button class="btn" style="margin-top: 15px;">Submit Answer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subjects Tab -->
+                <div id="subjects" class="tab-content hidden">
+                    <h2>📚 Learning Subjects</h2>
+                    <div class="subjects-grid">
+                        <div class="subject-card" onclick="exploreSubject('biology')">
+                            <div class="subject-icon">🧬</div>
+                            <h3>Biology</h3>
+                            <p>Anatomy, Cells, Genetics, Ecology</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 78%"></div>
+                            </div>
+                            <small>78% Complete</small>
+                        </div>
+                        
+                        <div class="subject-card" onclick="exploreSubject('chemistry')">
+                            <div class="subject-icon">⚗️</div>
+                            <h3>Chemistry</h3>
+                            <p>Molecules, Reactions, Elements</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%"></div>
+                            </div>
+                            <small>45% Complete</small>
+                        </div>
+                        
+                        <div class="subject-card" onclick="exploreSubject('physics')">
+                            <div class="subject-icon">⚛️</div>
+                            <h3>Physics</h3>
+                            <p>Mechanics, Electricity, Optics</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 32%"></div>
+                            </div>
+                            <small>32% Complete</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Tab -->
+                <div id="progress" class="tab-content hidden">
+                    <h2>📈 Your Learning Progress</h2>
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3>📊 Statistics</h3>
+                            <div style="margin: 15px 0;">
+                                <strong>Total XP:</strong> 1,250 ⭐<br>
+                                <strong>Current Level:</strong> 12 🎯<br>
+                                <strong>Quizzes Completed:</strong> 45 ❓<br>
+                                <strong>Images Uploaded:</strong> 23 📸<br>
+                                <strong>Perfect Scores:</strong> 12 🏆
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>🎯 Level Progress</h3>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 50%"></div>
+                            </div>
+                            <p>500 / 1000 XP to Level 13</p>
+                            <small>Next level unlocks: Advanced Biology</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Badges Tab -->
+                <div id="badges" class="tab-content hidden">
+                    <h2>🏆 Achievement Badges</h2>
+                    <div class="badge-container">
+                        <div class="badge">🔥 Week Warrior</div>
+                        <div class="badge">📸 Photo Expert</div>
+                        <div class="badge">🧬 Bio Master</div>
+                        <div class="badge">⭐ Quiz Champion</div>
+                        <div class="badge">🎯 Perfect Score</div>
+                        <div class="badge">📚 Knowledge Seeker</div>
+                    </div>
+                    <div class="card">
+                        <h3>🎯 Next Badges to Unlock</h3>
+                        <div style="margin: 15px 0;">
+                            <div>⚗️ <strong>Chemistry Guru</strong> - Complete 50 chemistry questions</div>
+                            <div style="margin: 10px 0;">Progress: 32/50 (64%)</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 64%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/config.example.js"></script>
+    <script>
+        // Navigation functionality
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.remove('hidden');
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        // Add click listeners to nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabName = link.getAttribute('data-tab');
+                showTab(tabName);
+            });
+        });
+
+        // File upload handling
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate using ConfigHelper
+            const validation = ConfigHelper.validateUpload(file);
+            const resultDiv = document.getElementById('uploadResult');
+            const contentDiv = document.getElementById('resultContent');
+            
+            if (!validation.valid) {
+                contentDiv.innerHTML = `<div style="color: #dc2626; font-weight: bold;">❌ ${validation.error}</div>`;
+                resultDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Simulate processing
+            contentDiv.innerHTML = `
+                <div style="color: #059669; font-weight: bold;">✅ Upload successful!</div>
+                <div style="margin: 15px 0;">
+                    <strong>File:</strong> ${file.name}<br>
+                    <strong>Size:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB<br>
+                    <strong>Type:</strong> ${file.type}
+                </div>
+                <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <strong>🔍 Classification Result:</strong><br>
+                    <em>Cell Structure: Mitochondria (98.5% confidence)</em><br>
+                    <small>+${APP_CONFIG.XP_REWARDS.IMAGE_UPLOAD} XP earned!</small>
+                </div>
+            `;
+            resultDiv.classList.remove('hidden');
+
+            // Add XP notification
+            showNotification(`+${APP_CONFIG.XP_REWARDS.IMAGE_UPLOAD} XP earned!`, 'success');
+        }
+
+        // Quiz option selection
+        function selectOption(option, isCorrect) {
+            // Remove previous selections
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            });
+            
+            // Highlight selected option
+            if (isCorrect) {
+                option.style.backgroundColor = 'rgba(16, 185, 129, 0.8)';
+                showNotification(`+${APP_CONFIG.XP_REWARDS.QUIZ_CORRECT} XP earned!`, 'success');
+            } else {
+                option.style.backgroundColor = 'rgba(239, 68, 68, 0.8)';
+                showNotification('Try again!', 'error');
+            }
+        }
+
+        // Subject exploration
+        function exploreSubject(subject) {
+            const subjectData = SUBJECT_CONFIG[subject];
+            alert(`🎓 Exploring ${subjectData.name}\n\nTopics: ${subjectData.topics.join(', ')}\n\n+${APP_CONFIG.XP_REWARDS.MODEL_VIEW} XP for viewing!`);
+            showNotification(`+${APP_CONFIG.XP_REWARDS.MODEL_VIEW} XP earned!`, 'success');
+        }
+
+        // Timer for quiz
+        let timeLeft = 275; // 4:35 in seconds
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft > 0) timeLeft--;
+        }
+        setInterval(updateTimer, 1000);
+
+        // Notification system
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : '#ef4444'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                font-weight: bold;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Initialize app
+        console.log('🎓 EduLens App Initialized');
+        console.log('📊 Configuration loaded:', {
+            apiUrl: API_CONFIG.BASE_URL,
+            demoMode: API_CONFIG.DEMO_MODE,
+            appName: APP_CONFIG.NAME,
+            version: APP_CONFIG.VERSION
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 EduLens Configuration Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #4f46e5;
+            transition: transform 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .card h3 {
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .config-item {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .config-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .config-value {
+            color: #4f46e5;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .subjects {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .subject-tag {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tests {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        
+        .test-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .test-status {
+            font-size: 1.2em;
+        }
+        
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .footer h3 {
+            margin-bottom: 15px;
+        }
+        
+        .footer ul {
+            list-style: none;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .footer li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .footer li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 EduLens Configuration</h1>
+            <p>Interactive Configuration Demo & Testing Dashboard</p>
+        </div>
+        
+        <div class="content">
+            <div class="status" id="status">
+                <div class="loading"></div> Loading configuration...
+            </div>
+            
+            <div id="config-content" style="display: none;">
+                <div class="grid">
+                    <div class="card">
+                        <h3>🔗 API Configuration</h3>
+                        <div class="config-item">
+                            <span class="config-label">Base URL</span>
+                            <span class="config-value" id="api-url">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Demo Mode</span>
+                            <span class="config-value" id="demo-mode">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Timeout</span>
+                            <span class="config-value" id="timeout">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Endpoints</span>
+                            <span class="config-value" id="endpoints-count">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>⚙️ App Configuration</h3>
+                        <div class="config-item">
+                            <span class="config-label">App Name</span>
+                            <span class="config-value" id="app-name">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Version</span>
+                            <span class="config-value" id="app-version">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Quiz XP</span>
+                            <span class="config-value" id="quiz-xp">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Upload XP</span>
+                            <span class="config-value" id="upload-xp">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>📚 Available Subjects</h3>
+                        <div class="subjects" id="subjects">
+                            <!-- Subjects will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>🛠️ Helper Functions</h3>
+                        <div class="config-item">
+                            <span class="config-label">Upload URL</span>
+                            <span class="config-value" id="upload-url">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">Level 10 XP</span>
+                            <span class="config-value" id="level-xp">-</span>
+                        </div>
+                        <div class="config-item">
+                            <span class="config-label">XP 1000 = Level</span>
+                            <span class="config-value" id="xp-level">-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tests">
+                    <h3>🧪 File Validation Tests</h3>
+                    <div id="validation-tests">
+                        <!-- Test results will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>🚀 Next Steps</h3>
+            <ul>
+                <li>Copy config.example.js to config.js for production use</li>
+                <li>Update API_CONFIG.BASE_URL with your backend server URL</li>
+                <li>Include config.js in your HTML pages with a script tag</li>
+                <li>Use ConfigHelper functions for API calls and validations</li>
+                <li>Customize XP rewards and app settings as needed</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Load the configuration directly (avoiding CORS issues) -->
+    <script>
+        // ============================================
+        // API Configuration
+        // ============================================
+        const API_CONFIG = {
+            BASE_URL: 'http://localhost:5000',
+            ENDPOINTS: {
+                UPLOAD_IMAGE: '/upload-image',
+                DASHBOARD: '/user/dashboard',
+                MCQ_DAILY: '/user/mcq/daily',
+                MCQ_SUBMIT: '/user/mcq/submit',
+                ACTIVITY_LOG: '/user/activity/log',
+                STREAK_COMPLETE: '/user/streak/complete',
+                STREAK_STATUS: '/user/streak/status',
+                BADGES_UNLOCK: '/user/badges/unlock',
+                BADGES_LIST: '/user/badges',
+                MODELS_PATH: '/static/models',
+            },
+            TIMEOUT: 30000,
+            DEMO_MODE: true,
+        };
+
+        // ============================================
+        // App Configuration
+        // ============================================
+        const APP_CONFIG = {
+            NAME: 'EduLens',
+            VERSION: '1.0.0',
+            XP_REWARDS: {
+                QUIZ_CORRECT: 10,
+                QUIZ_PERFECT_BONUS: 20,
+                MODEL_VIEW: 5,
+                IMAGE_UPLOAD: 15,
+                DAILY_STREAK: 25,
+            },
+            LEVELS: {
+                XP_PER_LEVEL: 100,
+                MAX_LEVEL: 50,
+            },
+            QUIZ: {
+                QUESTIONS_PER_DAY: 5,
+                TIME_LIMIT: 300,
+                PASSING_SCORE: 60,
+            },
+            STREAK: {
+                GRACE_PERIOD_HOURS: 24,
+                MAX_STREAK_DISPLAY: 999,
+            },
+            UPLOAD: {
+                MAX_FILE_SIZE: 10 * 1024 * 1024,
+                ALLOWED_TYPES: ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'],
+                COMPRESS_QUALITY: 0.8,
+            },
+            VIEWER: {
+                CAMERA_FOV: 45,
+                CAMERA_NEAR: 0.1,
+                CAMERA_FAR: 1000,
+                ENABLE_SHADOWS: true,
+                ENABLE_ANTIALIASING: true,
+                MAX_PIXEL_RATIO: 2,
+            },
+            UI: {
+                ANIMATION_DURATION: 300,
+                TOAST_DURATION: 5000,
+                AUTO_SAVE_INTERVAL: 60000,
+            },
+        };
+
+        // ============================================
+        // Subject Configuration
+        // ============================================
+        const SUBJECT_CONFIG = {
+            biology: {
+                name: 'Biology',
+                icon: '🧬',
+                color: '#059669',
+                topics: ['anatomy', 'cells', 'genetics', 'ecology'],
+            },
+            chemistry: {
+                name: 'Chemistry',
+                icon: '⚗️',
+                color: '#7c3aed',
+                topics: ['molecules', 'reactions', 'elements', 'compounds'],
+            },
+            physics: {
+                name: 'Physics',
+                icon: '⚛️',
+                color: '#dc2626',
+                topics: ['mechanics', 'electricity', 'optics', 'quantum'],
+            },
+        };
+
+        // ============================================
+        // Helper Functions
+        // ============================================
+        const ConfigHelper = {
+            getApiUrl(endpoint) {
+                return `${API_CONFIG.BASE_URL}${endpoint}`;
+            },
+            
+            async apiRequest(endpoint, options = {}) {
+                const url = this.getApiUrl(endpoint);
+                const timeout = options.timeout || API_CONFIG.TIMEOUT;
+                
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), timeout);
+                    
+                    const response = await fetch(url, {
+                        ...options,
+                        signal: controller.signal,
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok) {
+                        throw new Error(`API Error: ${response.statusText}`);
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error('API Request failed:', error);
+                    
+                    if (API_CONFIG.DEMO_MODE) {
+                        console.log('Demo mode enabled, returning fallback data');
+                        return null;
+                    }
+                    
+                    throw error;
+                }
+            },
+            
+            getSubject(subjectKey) {
+                return SUBJECT_CONFIG[subjectKey] || null;
+            },
+            
+            calculateXPForLevel(level) {
+                return level * APP_CONFIG.LEVELS.XP_PER_LEVEL;
+            },
+            
+            calculateLevelFromXP(xp) {
+                return Math.floor(xp / APP_CONFIG.LEVELS.XP_PER_LEVEL) + 1;
+            },
+            
+            validateUpload(file) {
+                if (file.size > APP_CONFIG.UPLOAD.MAX_FILE_SIZE) {
+                    return {
+                        valid: false,
+                        error: 'File size exceeds 10MB limit'
+                    };
+                }
+                
+                if (!APP_CONFIG.UPLOAD.ALLOWED_TYPES.includes(file.type)) {
+                    return {
+                        valid: false,
+                        error: 'Invalid file type. Please upload an image.'
+                    };
+                }
+                
+                return { valid: true };
+            },
+        };
+
+        console.log('✅ EduLens configuration loaded');
+        console.log('📍 API Base URL:', API_CONFIG.BASE_URL);
+        console.log('🎮 Demo Mode:', API_CONFIG.DEMO_MODE ? 'Enabled' : 'Disabled');
+    </script>
+    
+    <!-- Initialize the demo -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                try {
+                    // Update status
+                    document.getElementById('status').innerHTML = '✅ Configuration loaded successfully!';
+                    document.getElementById('status').style.background = '#10b981';
+                    
+                    // Show content
+                    document.getElementById('config-content').style.display = 'block';
+                    
+                    // Populate API config
+                    document.getElementById('api-url').textContent = API_CONFIG.BASE_URL;
+                    document.getElementById('demo-mode').textContent = API_CONFIG.DEMO_MODE ? 'Enabled' : 'Disabled';
+                    document.getElementById('timeout').textContent = API_CONFIG.TIMEOUT + 'ms';
+                    document.getElementById('endpoints-count').textContent = Object.keys(API_CONFIG.ENDPOINTS).length;
+                    
+                    // Populate app config
+                    document.getElementById('app-name').textContent = APP_CONFIG.NAME;
+                    document.getElementById('app-version').textContent = APP_CONFIG.VERSION;
+                    document.getElementById('quiz-xp').textContent = APP_CONFIG.XP_REWARDS.QUIZ_CORRECT + ' XP';
+                    document.getElementById('upload-xp').textContent = APP_CONFIG.XP_REWARDS.IMAGE_UPLOAD + ' XP';
+                    
+                    // Populate subjects
+                    const subjectsDiv = document.getElementById('subjects');
+                    Object.entries(SUBJECT_CONFIG).forEach(([key, subject]) => {
+                        const tag = document.createElement('div');
+                        tag.className = 'subject-tag';
+                        tag.innerHTML = `${subject.icon} ${subject.name} (${subject.topics.length})`;
+                        subjectsDiv.appendChild(tag);
+                    });
+                    
+                    // Test helper functions
+                    const uploadUrl = ConfigHelper.getApiUrl(API_CONFIG.ENDPOINTS.UPLOAD_IMAGE);
+                    document.getElementById('upload-url').textContent = uploadUrl;
+                    document.getElementById('level-xp').textContent = ConfigHelper.calculateXPForLevel(10) + ' XP';
+                    document.getElementById('xp-level').textContent = 'Level ' + ConfigHelper.calculateLevelFromXP(1000);
+                    
+                    // Test file validation
+                    const testFiles = [
+                        { name: 'valid-image.jpg', size: 2 * 1024 * 1024, type: 'image/jpeg' },
+                        { name: 'too-large.jpg', size: 15 * 1024 * 1024, type: 'image/jpeg' },
+                        { name: 'invalid-type.txt', size: 1024, type: 'text/plain' }
+                    ];
+                    
+                    const testsDiv = document.getElementById('validation-tests');
+                    testFiles.forEach(file => {
+                        const result = ConfigHelper.validateUpload(file);
+                        const testDiv = document.createElement('div');
+                        testDiv.className = 'test-item';
+                        testDiv.innerHTML = `
+                            <span class="test-status">${result.valid ? '✅' : '❌'}</span>
+                            <strong>${file.name}</strong>: ${result.valid ? 'Valid' : result.error}
+                        `;
+                        testsDiv.appendChild(testDiv);
+                    });
+                    
+                } catch (error) {
+                    document.getElementById('status').innerHTML = '❌ Error loading configuration: ' + error.message;
+                    document.getElementById('status').style.background = '#ef4444';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 3D Model Viewer - EduLens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #4f46e5;
+            background: #f0f4ff;
+        }
+
+        .viewer-container {
+            margin-top: 80px;
+            height: calc(100vh - 80px);
+            display: grid;
+            grid-template-columns: 1fr 350px;
+        }
+
+        .main-viewer {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .viewer-canvas {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .model-placeholder {
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .model-title {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .model-subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+
+        .viewer-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4f46e5;
+        }
+
+        .info-panel {
+            background: white;
+            padding: 30px;
+            overflow-y: auto;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .model-info {
+            margin-bottom: 30px;
+        }
+
+        .info-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-description {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .features-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: #e0e7ff;
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+        }
+
+        .feature-text {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .learning-section {
+            margin-bottom: 30px;
+        }
+
+        .quiz-preview {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .quiz-preview:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .quiz-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .quiz-reward {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .related-models {
+            margin-bottom: 30px;
+        }
+
+        .model-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .related-model {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8fafc;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .related-model:hover {
+            border-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        .model-thumb {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .model-info-text {
+            flex: 1;
+        }
+
+        .model-name {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 3px;
+        }
+
+        .model-category {
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .action-btn.secondary:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .xp-notification {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .xp-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 100;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .viewer-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-panel {
+                height: 50vh;
+                position: sticky;
+                bottom: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .viewer-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .control-btn {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                🎓 EduLens
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 3D Viewer Container -->
+    <div class="viewer-container">
+        <!-- Main Viewer Area -->
+        <div class="main-viewer">
+            <div class="viewer-canvas">
+                <div class="model-placeholder">
+                    <div class="model-title">💓 Human Heart</div>
+                    <div class="model-subtitle">Interactive 3D Model</div>
+                    <div style="font-size: 1em; opacity: 0.7;">Use controls below to rotate, zoom, and explore</div>
+                </div>
+            </div>
+
+            <!-- Viewer Controls -->
+            <div class="viewer-controls">
+                <button class="control-btn active" onclick="setViewMode('rotate')">🔄 Rotate</button>
+                <button class="control-btn" onclick="setViewMode('zoom')">🔍 Zoom</button>
+                <button class="control-btn" onclick="setViewMode('section')">✂️ Section</button>
+                <button class="control-btn" onclick="setViewMode('xray')">🩻 X-Ray</button>
+                <button class="control-btn" onclick="resetView()">🏠 Reset</button>
+            </div>
+
+            <!-- Loading Overlay (initially hidden) -->
+            <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+                <div class="loading-content">
+                    <div class="spinner"></div>
+                    <h3>Loading 3D Model...</h3>
+                    <p>Preparing your interactive experience</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Panel -->
+        <div class="info-panel">
+            <!-- Model Information -->
+            <div class="model-info">
+                <div class="info-title">
+                    💓 Human Heart
+                </div>
+                <div class="info-description">
+                    The heart is a muscular organ that pumps blood throughout the body. It has four chambers: two atria and two ventricles. Explore the anatomy and learn how blood flows through this vital organ.
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Chambers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100k+</div>
+                        <div class="stat-label">Beats/Day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Features -->
+            <div class="features-section">
+                <div class="section-title">
+                    🎯 Interactive Features
+                </div>
+                <div class="features-list">
+                    <div class="feature-item" onclick="highlightPart('chambers')">
+                        <div class="feature-icon">🏠</div>
+                        <div class="feature-text">Heart Chambers</div>
+                    </div>
+                    <div class="feature-item" onclick="highlightPart('valves')">
+                        <div class="feature-icon">🚪</div>
+                        <div class="feature-text">Heart Valves</div>
+                    </div>
+                    <div class="feature-item" onclick="highlightPart('arteries')">
+                        <div class="feature-icon">🩸</div>
+                        <div class="feature-text">Major Arteries</div>
+                    </div>
+                    <div class="feature-item" onclick="showBloodFlow()">
+                        <div class="feature-icon">➡️</div>
+                        <div class="feature-text">Blood Flow Animation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Section -->
+            <div class="learning-section">
+                <div class="section-title">
+                    📚 Learn More
+                </div>
+                
+                <div class="quiz-preview" onclick="startQuiz()" onmousedown="window.location.href='quiz.html?topic=heart'">
+                    <div class="quiz-title">Take Heart Quiz</div>
+                    <div class="quiz-reward">+50 XP • 5 Questions</div>
+                </div>
+            </div>
+
+            <!-- Related Models -->
+            <div class="related-models">
+                <div class="section-title">
+                    🔗 Related Models
+                </div>
+                <div class="model-list">
+                    <div class="related-model" onclick="loadModel('lungs')">
+                        <div class="model-thumb">🫁</div>
+                        <div class="model-info-text">
+                            <div class="model-name">Lungs</div>
+                            <div class="model-category">Respiratory System</div>
+                        </div>
+                    </div>
+                    
+                    <div class="related-model" onclick="loadModel('blood-vessels')">
+                        <div class="model-thumb">🩸</div>
+                        <div class="model-info-text">
+                            <div class="model-name">Blood Vessels</div>
+                            <div class="model-category">Circulatory System</div>
+                        </div>
+                    </div>
+                    
+                    <div class="related-model" onclick="loadModel('brain')">
+                        <div class="model-thumb">🧠</div>
+                        <div class="model-info-text">
+                            <div class="model-name">Brain</div>
+                            <div class="model-category">Nervous System</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn" onclick="saveModel()">
+                    💾 Save to Library
+                </button>
+                <button class="action-btn secondary" onclick="shareModel()">
+                    📤 Share Model
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- XP Notification -->
+    <div class="xp-notification" id="xpNotification">
+        +5 XP earned! 🎉
+    </div>
+
+    <!-- Include Configuration -->
+    <script src="js/config.example.js"></script>
+    <script>
+        let currentViewMode = 'rotate';
+        let modelLoaded = true;
+
+        // Initialize 3D viewer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get model from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const modelName = urlParams.get('model') || 'heart';
+            
+            initializeViewer(modelName);
+            
+            // Award XP for viewing model
+            setTimeout(() => {
+                showXPNotification(`+${APP_CONFIG.XP_REWARDS.MODEL_VIEW} XP`);
+            }, 1000);
+        });
+
+        function initializeViewer(modelName) {
+            console.log(`🎯 Loading 3D model: ${modelName}`);
+            
+            // Simulate 3D model initialization
+            const canvas = document.querySelector('.viewer-canvas');
+            
+            // In a real implementation, this would initialize Three.js or similar
+            console.log('3D viewer initialized with model:', modelName);
+        }
+
+        // View mode controls
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            
+            // Update active button
+            document.querySelectorAll('.control-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log('View mode set to:', mode);
+            showNotification(`${getViewModeIcon(mode)} ${mode.toUpperCase()} mode activated`);
+        }
+
+        function getViewModeIcon(mode) {
+            const icons = {
+                'rotate': '🔄',
+                'zoom': '🔍',
+                'section': '✂️',
+                'xray': '🩻'
+            };
+            return icons[mode] || '🎯';
+        }
+
+        function resetView() {
+            console.log('View reset to default position');
+            showNotification('🏠 View reset to default position');
+        }
+
+        // Interactive features
+        function highlightPart(part) {
+            console.log(`Highlighting: ${part}`);
+            showNotification(`🎯 Highlighting ${part}`);
+            showXPNotification(`+${APP_CONFIG.XP_REWARDS.MODEL_VIEW} XP`);
+        }
+
+        function showBloodFlow() {
+            console.log('Showing blood flow animation');
+            showNotification('🩸 Blood flow animation started');
+            showXPNotification(`+${APP_CONFIG.XP_REWARDS.MODEL_VIEW} XP`);
+        }
+
+        // Learning functions
+        function startQuiz() {
+            console.log('🧠 Starting Heart Quiz');
+            // Immediate navigation to quiz page
+            window.location.href = 'quiz.html?topic=heart&source=3d-viewer';
+        }
+
+        // Model management
+        function loadModel(modelName) {
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                console.log(`Loading new model: ${modelName}`);
+                
+                // Update UI for new model
+                const modelNames = {
+                    'lungs': { icon: '🫁', name: 'Lungs', description: 'Respiratory system organs that exchange oxygen and carbon dioxide.' },
+                    'blood-vessels': { icon: '🩸', name: 'Blood Vessels', description: 'Network of arteries, veins, and capillaries that transport blood.' },
+                    'brain': { icon: '🧠', name: 'Brain', description: 'Control center of the nervous system that processes information.' }
+                };
+                
+                const model = modelNames[modelName];
+                if (model) {
+                    document.querySelector('.model-title').textContent = `${model.icon} ${model.name}`;
+                    document.querySelector('.info-title').textContent = `${model.icon} ${model.name}`;
+                    document.querySelector('.info-description').textContent = model.description;
+                }
+                
+                showXPNotification(`+${APP_CONFIG.XP_REWARDS.MODEL_VIEW} XP`);
+            }, 1500);
+        }
+
+        function saveModel() {
+            showNotification('💾 Model saved to your library!');
+            console.log('Model saved to user library');
+        }
+
+        function shareModel() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Check out this 3D model on EduLens!',
+                    text: 'Interactive 3D learning experience',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                navigator.clipboard.writeText(window.location.href);
+                showNotification('📤 Link copied to clipboard!');
+            }
+        }
+
+        // UI Helper functions
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showXPNotification(message) {
+            const notification = document.getElementById('xpNotification');
+            notification.textContent = message + ' 🎉';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function showNotification(message) {
+            // Create temporary notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 150px;
+                right: 30px;
+                background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 1002;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // Hide and remove notification
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Touch gestures for mobile (simplified)
+        let startX, startY;
+
+        document.querySelector('.viewer-canvas').addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.querySelector('.viewer-canvas').addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            const deltaX = e.touches[0].clientX - startX;
+            const deltaY = e.touches[0].clientY - startY;
+            
+            // In a real implementation, this would control the 3D model rotation
+            console.log('Touch gesture:', { deltaX, deltaY });
+        });
+
+        console.log('🎯 3D Viewer initialized');
+        console.log('📱 Touch gestures enabled');
+        console.log('🎮 Interactive features ready');
+    </script>
+</body>
+</html>

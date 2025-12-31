@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Navigation Test - EduLens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+        .page-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .page-btn:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #374151;
+            margin: 25px 0 15px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 EduLens Navigation Test</h1>
+        
+        <h2>📝 Direct Quiz Links</h2>
+        <a href="quiz.html?topic=daily" class="test-btn">📝 Daily Quiz (5 Questions)</a>
+        <a href="quiz.html?topic=heart" class="test-btn">💓 Heart Quiz (5 Questions)</a>
+        <a href="quiz.html?topic=biology" class="test-btn">🧬 Biology Quiz (5 Questions)</a>
+        
+        <h2>📱 Main Pages</h2>
+        <a href="index.html" class="test-btn page-btn">🏠 Homepage</a>
+        <a href="dashboard.html" class="test-btn page-btn">📊 Dashboard (Click Start Quiz)</a>
+        <a href="3d-viewer.html" class="test-btn page-btn">🎯 3D Viewer (Click Heart Quiz)</a>
+        
+        <h2>🧪 Test Instructions</h2>
+        <div style="background: #f0f4ff; padding: 20px; border-radius: 10px; color: #374151;">
+            <p><strong>To test quiz navigation:</strong></p>
+            <ol>
+                <li>✅ Click any direct quiz link above</li>
+                <li>✅ Go to Dashboard → Click "Start Quiz" button</li>
+                <li>✅ Go to 3D Viewer → Click "Take Heart Quiz"</li>
+            </ol>
+            <p><strong>Expected behavior:</strong></p>
+            <ul>
+                <li>🎯 Should navigate to quiz page immediately</li>
+                <li>📝 Quiz should start with 5 questions</li>
+                <li>⏰ 30-second timer per question</li>
+                <li>➡️ Auto-advance after selecting answer</li>
+                <li>🏆 Show final score and XP earned</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

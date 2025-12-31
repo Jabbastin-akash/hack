@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Daily Quiz - EduLens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-title {
+            font-size: 2.2em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .quiz-subtitle {
+            color: #6b7280;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .progress-container {
+            background: #e5e7eb;
+            border-radius: 15px;
+            height: 8px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.5s ease;
+        }
+
+        .question-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background: #f8fafc;
+            border-radius: 15px;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: #4f46e5;
+            font-size: 1.1em;
+        }
+
+        .timer {
+            font-weight: 700;
+            color: #ef4444;
+            font-size: 1.1em;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover {
+            border-color: #4f46e5;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.2);
+        }
+
+        .option-letter {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .option.selected {
+            border-color: #4f46e5;
+            background: #f0f4ff;
+        }
+
+        .option.correct {
+            border-color: #10b981;
+            background: #d1fae5;
+            animation: correctAnswer 0.6s ease;
+        }
+
+        .option.correct .option-letter {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .option.incorrect {
+            border-color: #ef4444;
+            background: #fee2e2;
+            animation: incorrectAnswer 0.6s ease;
+        }
+
+        .option.incorrect .option-letter {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrectAnswer {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .quiz-complete {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        .completion-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .completion-title {
+            font-size: 2.5em;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .score-display {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .xp-reward {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.2em;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .feedback-message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .feedback-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feedback-correct {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .feedback-incorrect {
+            background: #fee2e2;
+            color: #7f1d1d;
+            border: 2px solid #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.2em;
+            }
+            
+            .option {
+                padding: 15px;
+                font-size: 1em;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <!-- Quiz Header -->
+        <div class="quiz-header">
+            <div class="quiz-title">📝 Daily Quiz Challenge</div>
+            <div class="quiz-subtitle">Test your knowledge and earn XP!</div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Question Info -->
+        <div class="question-info">
+            <div class="question-number" id="questionNumber">Question 1 of 5</div>
+            <div class="timer" id="timer">⏱️ 30s</div>
+        </div>
+
+        <!-- Question Container -->
+        <div class="question-container" id="questionContainer">
+            <div class="question-text" id="questionText">Loading question...</div>
+            <div class="options-container" id="optionsContainer">
+                <!-- Options will be dynamically generated -->
+            </div>
+        </div>
+
+        <!-- Feedback Message -->
+        <div class="feedback-message" id="feedbackMessage"></div>
+
+        <!-- Quiz Complete Screen -->
+        <div class="quiz-complete" id="quizComplete">
+            <div class="completion-icon" id="completionIcon">🎉</div>
+            <div class="completion-title" id="completionTitle">Quiz Complete!</div>
+            <div class="score-display" id="scoreDisplay">Score: 0/5</div>
+            <div class="xp-reward" id="xpReward">+0 XP Earned!</div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="restartQuiz()">🔄 Retake Quiz</button>
+                <a href="dashboard.html" class="btn btn-secondary">📊 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Configuration -->
+    <script src="js/config.example.js"></script>
+    <script>
+        // Quiz Questions Database
+        const quizQuestions = {
+            daily: [
+                {
+                    question: "What is the powerhouse of the cell?",
+                    options: ["Nucleus", "Mitochondria", "Ribosome", "Chloroplast"],
+                    correct: 1,
+                    explanation: "Mitochondria are called the powerhouse of the cell because they produce ATP (energy)."
+                },
+                {
+                    question: "Which organ pumps blood throughout the human body?",
+                    options: ["Liver", "Kidneys", "Heart", "Lungs"],
+                    correct: 2,
+                    explanation: "The heart is a muscular organ that pumps blood through the circulatory system."
+                },
+                {
+                    question: "What gas do plants absorb from the atmosphere during photosynthesis?",
+                    options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+                    correct: 1,
+                    explanation: "Plants absorb carbon dioxide from the atmosphere and use it to produce glucose during photosynthesis."
+                },
+                {
+                    question: "How many chambers does a human heart have?",
+                    options: ["2", "3", "4", "5"],
+                    correct: 2,
+                    explanation: "The human heart has four chambers: two atria (upper chambers) and two ventricles (lower chambers)."
+                },
+                {
+                    question: "Which part of the brain controls balance and coordination?",
+                    options: ["Cerebrum", "Cerebellum", "Medulla", "Hypothalamus"],
+                    correct: 1,
+                    explanation: "The cerebellum is responsible for maintaining balance, posture, and coordinating voluntary movements."
+                }
+            ],
+            heart: [
+                {
+                    question: "How many chambers does the human heart have?",
+                    options: ["2", "3", "4", "5"],
+                    correct: 2,
+                    explanation: "The human heart has four chambers: two atria and two ventricles."
+                },
+                {
+                    question: "Which side of the heart pumps oxygenated blood?",
+                    options: ["Left side", "Right side", "Both sides", "Neither side"],
+                    correct: 0,
+                    explanation: "The left side of the heart pumps oxygenated blood to the body."
+                },
+                {
+                    question: "What prevents blood from flowing backward in the heart?",
+                    options: ["Muscles", "Valves", "Arteries", "Chambers"],
+                    correct: 1,
+                    explanation: "Heart valves prevent blood from flowing backward and ensure one-way blood flow."
+                },
+                {
+                    question: "Which blood vessel carries oxygenated blood from the heart to the body?",
+                    options: ["Vena Cava", "Pulmonary Artery", "Aorta", "Pulmonary Vein"],
+                    correct: 2,
+                    explanation: "The aorta is the largest artery that carries oxygenated blood from the heart to the body."
+                },
+                {
+                    question: "What is the normal resting heart rate for adults?",
+                    options: ["40-50 BPM", "60-100 BPM", "120-140 BPM", "150-200 BPM"],
+                    correct: 1,
+                    explanation: "The normal resting heart rate for adults is 60-100 beats per minute."
+                }
+            ],
+            biology: [
+                {
+                    question: "What is the basic unit of life?",
+                    options: ["Atom", "Molecule", "Cell", "Tissue"],
+                    correct: 2,
+                    explanation: "The cell is the basic structural and functional unit of all living organisms."
+                },
+                {
+                    question: "Which organelle contains the cell's genetic material?",
+                    options: ["Mitochondria", "Nucleus", "Ribosome", "Chloroplast"],
+                    correct: 1,
+                    explanation: "The nucleus contains the cell's DNA and controls cellular activities."
+                },
+                {
+                    question: "What process do plants use to make their own food?",
+                    options: ["Respiration", "Photosynthesis", "Digestion", "Fermentation"],
+                    correct: 1,
+                    explanation: "Photosynthesis is the process plants use to convert sunlight, water, and CO2 into glucose."
+                },
+                {
+                    question: "Which system in the human body is responsible for transporting nutrients?",
+                    options: ["Nervous System", "Respiratory System", "Circulatory System", "Digestive System"],
+                    correct: 2,
+                    explanation: "The circulatory system transports nutrients, oxygen, and waste products throughout the body."
+                },
+                {
+                    question: "What is the largest organ in the human body?",
+                    options: ["Liver", "Brain", "Lungs", "Skin"],
+                    correct: 3,
+                    explanation: "The skin is the largest organ, covering the entire body surface."
+                }
+            ]
+        };
+
+        // Current quiz questions (will be set based on topic)
+        let currentQuizQuestions = [];
+
+        // Quiz State
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timer;
+        let quizStarted = false;
+        let answered = false;
+
+        // DOM Elements
+        const questionNumberEl = document.getElementById('questionNumber');
+        const timerEl = document.getElementById('timer');
+        const progressBar = document.getElementById('progressBar');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const questionContainer = document.getElementById('questionContainer');
+        const quizComplete = document.getElementById('quizComplete');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+
+        // Initialize Quiz
+        function initializeQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            quizStarted = true;
+            answered = false;
+            
+            // Hide completion screen and show question
+            quizComplete.style.display = 'none';
+            questionContainer.style.display = 'block';
+            
+            loadQuestion();
+            startTimer();
+        }
+
+        // Load Current Question
+        function loadQuestion() {
+            if (currentQuestion >= currentQuizQuestions.length) {
+                completeQuiz();
+                return;
+            }
+
+            const question = currentQuizQuestions[currentQuestion];
+            answered = false;
+
+            // Update UI elements
+            questionNumberEl.textContent = `Question ${currentQuestion + 1} of ${currentQuizQuestions.length}`;
+            questionText.textContent = question.question;
+            
+            // Update progress bar
+            const progress = ((currentQuestion) / currentQuizQuestions.length) * 100;
+            progressBar.style.width = progress + '%';
+
+            // Clear and populate options
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.onclick = () => selectOption(index);
+                
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div>${option}</div>
+                `;
+                
+                optionsContainer.appendChild(optionElement);
+            });
+
+            // Reset timer
+            timeLeft = 30;
+            updateTimerDisplay();
+            hideFeedback();
+        }
+
+        // Select Option
+        function selectOption(selectedIndex) {
+            if (answered) return;
+            
+            answered = true;
+            clearInterval(timer);
+            
+            const question = currentQuizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const isCorrect = selectedIndex === question.correct;
+
+            // Mark selected option
+            options[selectedIndex].classList.add('selected');
+
+            // Show correct/incorrect styling
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+                // Disable further clicks
+                option.style.pointerEvents = 'none';
+            });
+
+            // Update score
+            if (isCorrect) {
+                score++;
+                showFeedback('Correct! ' + question.explanation, true);
+            } else {
+                showFeedback('Incorrect. ' + question.explanation, false);
+            }
+
+            // Move to next question after delay
+            setTimeout(() => {
+                currentQuestion++;
+                loadQuestion();
+                if (currentQuestion < currentQuizQuestions.length) {
+                    startTimer();
+                }
+            }, 3000);
+        }
+
+        // Timer Functions
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            timerEl.textContent = `⏱️ ${timeLeft}s`;
+            
+            // Change color when time is running out
+            if (timeLeft <= 10) {
+                timerEl.style.color = '#ef4444';
+            } else {
+                timerEl.style.color = '#f59e0b';
+            }
+        }
+
+        function timeUp() {
+            if (answered) return;
+            
+            answered = true;
+            clearInterval(timer);
+            
+            const question = quizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            // Show correct answer
+            options[question.correct].classList.add('correct');
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+
+            showFeedback('⏰ Time\'s up! ' + question.explanation, false);
+
+            // Move to next question
+            setTimeout(() => {
+                currentQuestion++;
+                loadQuestion();
+                if (currentQuestion < quizQuestions.length) {
+                    startTimer();
+                }
+            }, 3000);
+        }
+
+        // Feedback Functions
+        function showFeedback(message, isCorrect) {
+            feedbackMessage.textContent = message;
+            feedbackMessage.className = `feedback-message show ${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}`;
+        }
+
+        function hideFeedback() {
+            feedbackMessage.classList.remove('show');
+        }
+
+        // Complete Quiz
+        function completeQuiz() {
+            clearInterval(timer);
+            
+            // Hide question container and show completion screen
+            questionContainer.style.display = 'none';
+            quizComplete.style.display = 'block';
+            
+            // Update progress bar to 100%
+            progressBar.style.width = '100%';
+            
+            // Calculate results
+            const percentage = Math.round((score / currentQuizQuestions.length) * 100);
+            let xpEarned = 0;
+            let completionIcon = '';
+            let completionTitle = '';
+            
+            if (percentage >= 80) {
+                xpEarned = APP_CONFIG.XP_REWARDS.QUIZ_CORRECT * currentQuizQuestions.length + APP_CONFIG.XP_REWARDS.QUIZ_PERFECT_BONUS;
+                completionIcon = '🏆';
+                completionTitle = 'Outstanding!';
+            } else if (percentage >= 60) {
+                xpEarned = APP_CONFIG.XP_REWARDS.QUIZ_CORRECT * score;
+                completionIcon = '🎉';
+                completionTitle = 'Well Done!';
+            } else {
+                xpEarned = Math.floor(APP_CONFIG.XP_REWARDS.QUIZ_CORRECT * score * 0.5);
+                completionIcon = '💪';
+                completionTitle = 'Keep Learning!';
+            }
+            
+            // Update completion screen
+            document.getElementById('completionIcon').textContent = completionIcon;
+            document.getElementById('completionTitle').textContent = completionTitle;
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}/${currentQuizQuestions.length} (${percentage}%)`;
+            document.getElementById('xpReward').textContent = `+${xpEarned} XP Earned!`;
+            
+            console.log(`Quiz completed: ${score}/${currentQuizQuestions.length} (${percentage}%)`);
+            console.log(`XP earned: ${xpEarned}`);
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            initializeQuiz();
+        }
+
+        // Get quiz from URL parameters
+        function getQuizFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('topic') || 'general';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizTopic = getQuizFromURL();
+            console.log('Starting quiz topic:', quizTopic);
+            
+            // Set current quiz questions based on topic
+            currentQuizQuestions = quizQuestions[quizTopic] || quizQuestions.daily;
+            
+            // Update quiz title based on topic
+            const topicTitles = {
+                daily: '📝 Daily Quiz Challenge',
+                heart: '💓 Heart Quiz',
+                biology: '🧬 Biology Quiz'
+            };
+            
+            document.querySelector('.quiz-title').textContent = topicTitles[quizTopic] || topicTitles.daily;
+            
+            // Start quiz automatically
+            setTimeout(() => {
+                initializeQuiz();
+            }, 500);
+        });
+
+        console.log('📝 Quiz system initialized');
+        console.log('📚 Multiple quiz topics available');
+        console.log('🎯 XP rewards configured');
+    </script>
+</body>
+</html>

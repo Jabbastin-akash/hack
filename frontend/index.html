@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 EduLens - Transform Images into 3D Models</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #4f46e5;
+            background: #f0f4ff;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .hero-section {
+            margin-bottom: 60px;
+        }
+
+        .hero-title {
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3em;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .upload-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #4f46e5;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .upload-area {
+            border: 3px dashed #d1d5db;
+            border-radius: 15px;
+            padding: 50px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #4f46e5;
+            background: #f0f4ff;
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #9ca3af;
+        }
+
+        .upload-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtitle {
+            color: #6b7280;
+            font-size: 1em;
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        .camera-area {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 50px 20px;
+            margin-bottom: 20px;
+        }
+
+        .camera-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #6b7280;
+        }
+
+        .start-camera-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-camera-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .features-preview {
+            margin-top: 80px;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .features-title {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1f2937;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .feature-icon {
+            font-size: 2em;
+        }
+
+        .feature-text {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        @media (max-width: 768px) {
+            .upload-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .hero-title {
+                font-size: 2.5em;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+        }
+
+        .processing-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .processing-content {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 400px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                🎓 EduLens
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1 class="hero-title">
+                Transform Images into<br>
+                <span class="highlight">Interactive 3D Models</span>
+            </h1>
+            <p class="hero-subtitle">
+                Upload any science image and watch it come to life in 3D. Learn biology, chemistry, and physics like never before.
+            </p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <!-- Upload Image Card -->
+            <div class="upload-card">
+                <div class="card-header">
+                    📁 Upload Image
+                </div>
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" class="file-input" accept="image/*" onchange="handleFileUpload(this)">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-title">Upload Your Image</div>
+                    <div class="upload-subtitle">Drop an image here or click to browse</div>
+                </div>
+                <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                    Select Image
+                </button>
+            </div>
+
+            <!-- Camera Card -->
+            <div class="upload-card">
+                <div class="card-header">
+                    📷 Use Camera
+                </div>
+                <div class="camera-area">
+                    <div class="camera-icon">📱</div>
+                    <div class="upload-title">Capture with Camera</div>
+                    <div class="upload-subtitle">Take a photo directly from your device camera</div>
+                </div>
+                <button class="start-camera-btn" onclick="startCamera()">
+                    Start Camera
+                </button>
+            </div>
+        </div>
+
+        <!-- Features Preview -->
+        <div class="features-preview">
+            <h2 class="features-title">Features Included</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">Image Upload & Classification</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">Interactive 3D Viewer</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">Daily Streak Tracker</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">XP & Level System</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">Quiz Challenges</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">Badges & Achievements</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">Mobile Responsive</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✅</div>
+                    <div class="feature-text">Touch Gestures</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Overlay -->
+    <div class="processing-overlay" id="processingOverlay">
+        <div class="processing-content">
+            <div class="spinner"></div>
+            <h3>Processing Image...</h3>
+            <p>Generating your 3D model, please wait.</p>
+        </div>
+    </div>
+
+    <!-- Include Configuration -->
+    <script src="js/config.example.js"></script>
+    <script>
+        // File upload handling
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validate using ConfigHelper
+            const validation = ConfigHelper.validateUpload(file);
+            
+            if (!validation.valid) {
+                alert(`❌ ${validation.error}`);
+                return;
+            }
+
+            // Show processing overlay
+            document.getElementById('processingOverlay').style.display = 'flex';
+
+            // Simulate processing
+            setTimeout(() => {
+                // Hide processing overlay
+                document.getElementById('processingOverlay').style.display = 'none';
+                
+                // Redirect to 3D viewer with success
+                window.location.href = `3d-viewer.html?model=generated&file=${encodeURIComponent(file.name)}`;
+            }, 3000);
+
+            console.log('File uploaded:', file.name);
+            console.log(`+${APP_CONFIG.XP_REWARDS.IMAGE_UPLOAD} XP earned!`);
+        }
+
+        // Camera functionality
+        function startCamera() {
+            // Check if we're in a secure context (HTTPS or localhost)
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('Camera not supported in this browser. Please use Chrome, Firefox, or Safari with HTTPS/localhost.');
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({ 
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                    facingMode: 'environment' // Use back camera on mobile
+                }
+            })
+                .then(function(stream) {
+                    // Create a simple camera interface
+                        const modal = document.createElement('div');
+                        modal.style.cssText = `
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: rgba(0,0,0,0.9);
+                            z-index: 2000;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        `;
+                        
+                        modal.innerHTML = `
+                            <div style="text-align: center; color: white;">
+                                <video id="cameraVideo" autoplay style="max-width: 80vw; max-height: 60vh; border-radius: 10px;"></video>
+                                <div style="margin-top: 20px;">
+                                    <button onclick="capturePhoto()" style="background: #4f46e5; color: white; padding: 12px 24px; border: none; border-radius: 25px; margin: 0 10px; cursor: pointer;">📸 Capture</button>
+                                    <button onclick="closeCamera()" style="background: #ef4444; color: white; padding: 12px 24px; border: none; border-radius: 25px; margin: 0 10px; cursor: pointer;">❌ Cancel</button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        document.body.appendChild(modal);
+                        document.getElementById('cameraVideo').srcObject = stream;
+                        
+                        // Store stream reference for cleanup
+                        window.currentStream = stream;
+                        window.currentModal = modal;
+                    })
+                    .catch(function(err) {
+                        console.error('Camera error:', err);
+                        let errorMessage = 'Camera access denied or not available.';
+                        
+                        if (err.name === 'NotAllowedError') {
+                            errorMessage = 'Camera permission denied. Please allow camera access and try again.';
+                        } else if (err.name === 'NotFoundError') {
+                            errorMessage = 'No camera found on this device.';
+                        } else if (err.name === 'NotSupportedError') {
+                            errorMessage = 'Camera not supported. Please use HTTPS or localhost.';
+                        }
+                        
+                        alert(errorMessage);
+                    });
+        }
+
+        // Camera capture functions
+        function capturePhoto() {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
+            
+            // Convert to blob and process
+            canvas.toBlob(function(blob) {
+                closeCamera();
+                
+                // Show processing
+                document.getElementById('processingOverlay').style.display = 'flex';
+                
+                setTimeout(() => {
+                    document.getElementById('processingOverlay').style.display = 'none';
+                    window.location.href = '3d-viewer.html?model=camera&source=camera';
+                }, 3000);
+                
+                console.log('Photo captured');
+                console.log(`+${APP_CONFIG.XP_REWARDS.IMAGE_UPLOAD} XP earned!`);
+            }, 'image/jpeg');
+        }
+
+        function closeCamera() {
+            if (window.currentStream) {
+                window.currentStream.getTracks().forEach(track => track.stop());
+            }
+            if (window.currentModal) {
+                document.body.removeChild(window.currentModal);
+            }
+        }
+
+        console.log('🏠 EduLens Homepage loaded');
+        console.log('📸 Image upload ready');
+        console.log('📱 Camera functionality available');
+    </script>
+</body>
+</html>
